@@ -1,12 +1,10 @@
 import z from 'zod';
+import { partialUserWithIdSchema } from './user.schemas';
 
 export const spaceSchema = z.object({
   title: z.string(),
   description: z.string(),
-  users: z.array(z.object({
-    id: z.number(),
-    admin: z.boolean().optional(),
-  })),
+  users: z.array(partialUserWithIdSchema),
 });
 
 export const partialSpaceSchema = spaceSchema.partial();
