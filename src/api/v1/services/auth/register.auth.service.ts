@@ -3,7 +3,7 @@ import { encryptPassword } from '../../../../utils';
 import { ConflictError, DatabaseError } from '../../../../errors';
 import { User } from '../../schemas';
 
-export async function register(user: User): Promise<string> {
+export async function register(user: User): Promise<number> {
   let userExists: boolean;
 
   try {
