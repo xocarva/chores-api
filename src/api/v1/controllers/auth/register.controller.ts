@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { authService } from '../../services';
 import { User, userSchema } from '../../schemas';
 
-export async function register(req: Request<User>, res: Response<{ id: string }>, next: NextFunction) {
+export async function register(req: Request<User>, res: Response<{ id: number }>, next: NextFunction) {
   const { body } = req;
 
   try {
