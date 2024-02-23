@@ -1,4 +1,4 @@
-import { deleteSpace, getSpaceById } from '../../repository';
+import { deleteSpaceById, getSpaceById } from '../../repository';
 import { DatabaseError, NotFoundError } from '../../../../errors';
 
 export async function deleteOne(id: number): Promise<void> {
@@ -8,7 +8,7 @@ export async function deleteOne(id: number): Promise<void> {
     throw new NotFoundError(`Space with id ${id} not found`);
   }
 
-  const deleted = await deleteSpace(id);
+  const deleted = await deleteSpaceById(id);
 
   if (!deleted) {
     throw new DatabaseError(`Space with id ${id} could not be deleted`);

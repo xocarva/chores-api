@@ -1,10 +1,14 @@
-import { DatabaseError } from '../../../../errors';
-import { getAllSpaces } from '../../repository';
-import { PartialSpaceWithId, SpaceWithId } from '../../schemas';
+import { getSpacesByUserId } from '../../repository';
+import { DatabaseError, UnauthorizedError } from '../../../../errors';
+import { SpaceWithId } from '../../schemas';
 
-export function getAll(params: PartialSpaceWithId): Promise<SpaceWithId[]> {
+export function getAll(id: number): Promise<SpaceWithId[]> {
+
+  if (!id) {
+    throw new UnauthorizedError('An error ocurred when accesing user id');
+  }
   try {
-    const spaces = getAllSpaces(params);
+    const spaces = getSpacesByUserId(id);
     return spaces;
 
   } catch (error) {
