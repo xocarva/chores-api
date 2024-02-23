@@ -1,9 +1,9 @@
 import { getUserByEmail } from '../../repository';
 import { generateToken, verifyPassword } from '../../../../utils';
 import { DatabaseError, NotFoundError, UnauthorizedError } from '../../../../errors';
-import { User, UserWithId } from '../../schemas';
+import { Credentials, UserWithId } from '../../schemas';
 
-export async function login(credentials: User): Promise<string> {
+export async function login(credentials: Credentials): Promise<string> {
   let user: UserWithId | null;
 
   try {
