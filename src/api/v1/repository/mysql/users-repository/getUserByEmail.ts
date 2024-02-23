@@ -1,13 +1,14 @@
+import { RowDataPacket } from 'mysql2';
+import { pool } from '../mysqlConnection';
 import { UserWithId } from '../../../schemas';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function getUserByEmail(_email: string): Promise<UserWithId> {
-  const user: UserWithId = {
-    id: 1,
-    name: 'Xoán',
-    email: 'correo@exemplo.com',
-    password: 'dn23rnfin3r',
-  };
+export async function getUserByEmail(email: string): Promise<UserWithId> {
+  const [ rows ] = await pool.query<RowDataPacket[]>(
+    'SELECT id, name, password, email FROM users WHERE email = ?',
+    [email],
+  );
 
-  return Promise.resolve(user);
+  const user: UserWithId = rows[0] as UserWithId;
+
+  return user;
 }
