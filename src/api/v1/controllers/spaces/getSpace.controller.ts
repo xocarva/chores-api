@@ -1,12 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { spacesService } from '../../services';
-import { SpaceWithId } from '../../schemas';
+import { SpaceWithId, routeParamIdSchema } from '../../schemas';
 
 export async function getSpace(req: Request, res: Response<{ space: SpaceWithId }>, next: NextFunction) {
-  const { id } = req.params;
-
   try {
-    const space = await spacesService.getOne(Number(id));
+    const { id } = routeParamIdSchema.parse(req.params);
+    const space = await spacesService.getOne(id);
 
     if (space) {
       res.status(200);
