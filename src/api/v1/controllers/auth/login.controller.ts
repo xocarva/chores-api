@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import { authService } from '../../services';
-import { User, userSchema } from '../../schemas';
+import { Credentials, credentialsSchema } from '../../schemas';
 
-export async function login(req: Request<User>, res: Response, next: NextFunction) {
+export async function login(req: Request<Credentials>, res: Response, next: NextFunction) {
   const { body } = req;
   
   try {
-    const user = userSchema.parse(body);
-    const token = await authService.login(user);
+    const credentials = credentialsSchema.parse(body);
+    const token = await authService.login(credentials);
 
     res.status(200);
     res.send({ token });
