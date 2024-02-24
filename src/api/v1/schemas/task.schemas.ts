@@ -3,10 +3,21 @@ import { partialUserWithIdSchema } from './user.schemas';
 
 export const taskSchema = z.object({
   title: z.string(),
-  date: z.date().optional(),
-  completed: z.boolean(),
+  completed: z.boolean().optional(),
   spaceId: z.number(),
   users: z.array(partialUserWithIdSchema),
+  date: z.union([
+    z.preprocess((arg) => {
+      if (typeof arg === 'string' && arg !== '') {
+        const parsedDate = new Date(arg);
+        if (!isNaN(parsedDate.getTime())) {
+          return parsedDate;
+        }
+      }
+      return arg;
+    }, z.date()),
+    z.null(),
+  ]).optional(),
 });
 
 export const partialTaskSchema = taskSchema.partial();
