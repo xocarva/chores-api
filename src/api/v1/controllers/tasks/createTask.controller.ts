@@ -2,7 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import { tasksService } from '../../services';
 import { Task, taskSchema } from '../../schemas';
 
-export async function createTask(req: Request<Task>, res: Response<{ id: number }>, next: NextFunction) {
+type TaskRequest = Request & { body: Task };
+
+export async function createTask(req: TaskRequest, res: Response<{ id: number }>, next: NextFunction) {
   const { body } = req;
 
   try {
