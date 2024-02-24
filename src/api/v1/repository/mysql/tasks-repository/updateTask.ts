@@ -8,46 +8,66 @@ export async function updateTask(id: number, taskData: PartialTask): Promise<Tas
   try {
     await connection.beginTransaction();
 
-    if (taskData.title || taskData.date || taskData.completed !== undefined) {
-      await connection.query(`
-        UPDATE tasks
-        SET title = COALESCE(?, title),
-            date = COALESCE(?, date),
-            completed = COALESCE(?, completed)
-        WHERE id = ?`,
-      [taskData.title, taskData.date, taskData.completed, id],
-      );
+    if (
+      taskData.title !== undefined
+      || taskData.date !== undefined
+      || taskData.completed !== undefined
+    ) {
+      const queryParams = [];
+      let query = 'UPDATE tasks SET ';
+
+      if (taskData.title !== undefined) {
+        query += 'title = ?, ';
+        queryParams.push(taskData.title);
+      }
+
+      if (taskData.date !== undefined) {
+        query += 'date = ?, ';
+        queryParams.push(taskData.date);
+      }
+
+      if (taskData.completed !== undefined) {
+        query += 'completed = ?, ';
+        queryParams.push(taskData.completed);
+      }
+
+      query = query.slice(0, -2);
+      query += ' WHERE id = ?';
+      queryParams.push(id);
+
+      await connection.query(query, queryParams);
     }
 
+
     if (taskData.users) {
-      await connection.query('DELETE FROM task_users WHERE taskId = ?', [id]);
+      await connection.query('DELETE FROM task_users WHERE task_id = ?', [id]);
 
       for (const user of taskData.users) {
         await connection.query(
-          'INSERT INTO task_users (taskId, userId, admin) VALUES (?, ?, ?)',
-          [id, user.id, user.admin ?? false],
+          'INSERT INTO task_users (task_id, user_id) VALUES (?, ?)',
+          [id, user.id],
         );
       }
     }
 
-    await connection.commit();
-
     const [updatedTaskRows] = await connection.query<RowDataPacket[]>(
-      'SELECT id, title, date, completed, spaceId FROM tasks WHERE id = ?',
+      'SELECT id, title, date, completed, space_id FROM tasks WHERE id = ?',
       [id],
     );
 
     const [usersRows] = await connection.query<RowDataPacket[]>(
-      `SELECT u.id, u.name, u.email, tu.admin 
+      `SELECT u.id, u.name
        FROM task_users tu
-       JOIN users u ON tu.userId = u.id
-       WHERE tu.taskId = ?`,
+       JOIN users u ON tu.user_id = u.id
+       WHERE tu.task_id = ?`,
       [id],
     );
 
     if (updatedTaskRows.length === 0) {
       throw new Error('Task not found');
     }
+
+    await connection.commit();
 
     const task: TaskWithId = {
       id: updatedTaskRows[0].id,

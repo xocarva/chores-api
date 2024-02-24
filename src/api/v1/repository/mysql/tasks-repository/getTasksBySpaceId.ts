@@ -14,12 +14,13 @@ interface TaskUserRow extends RowDataPacket {
 
 export async function getTasksBySpaceId(spaceId: number): Promise<TaskWithId[]> {
   const query = `
-    SELECT t.id AS taskId, t.title, t.date, t.completed, t.spaceId,
-           u.id AS userId, u.name AS userName
+    SELECT
+         t.id AS taskId, t.title, t.date, t.completed, t.space_id AS spaceId,
+         u.id AS userId, u.name AS userName
     FROM tasks t
-    JOIN task_users tu ON t.id = tu.taskId
-    JOIN users u ON tu.userId = u.id
-    WHERE t.spaceId = ?
+    JOIN task_users tu ON t.id = tu.task_id
+    JOIN users u ON tu.user_id = u.id
+    WHERE t.space_id = ?
     ORDER BY t.id, u.id`;
 
   const [rows] = await pool.query<TaskUserRow[]>(query, [spaceId]);

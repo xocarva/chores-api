@@ -10,17 +10,17 @@ export async function saveTask(taskData: Task): Promise<TaskWithId> {
   try {
     await connection.beginTransaction();
 
-    const [taskResult] = await connection.query<ResultSetHeader>(
-      'INSERT INTO tasks (title, date, completed, spaceId) VALUES (?, ?, ?, ?)',
-      [title, date ?? null, completed, spaceId],
+    const [ taskResult ] = await connection.query<ResultSetHeader>(
+      'INSERT INTO tasks (title, date, completed, space_id) VALUES (?, ?, ?, ?)',
+      [title, date ?? null, completed ?? false, spaceId],
     );
 
     const taskId = taskResult.insertId;
 
     for (const user of users) {
       await connection.query(
-        'INSERT INTO task_users (taskId, userId, admin) VALUES (?, ?, ?)',
-        [taskId, user.id, user.admin ?? null],
+        'INSERT INTO task_users (task_id, user_id) VALUES (?, ?)',
+        [taskId, user.id],
       );
     }
 
