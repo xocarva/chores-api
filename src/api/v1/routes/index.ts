@@ -13,7 +13,7 @@ router.get<{}, MessageResponse>('/', (_req, res) => {
   });
 });
 
-router.get('/login', login);
+router.post('/login', login);
 router.post('/register', register);
 router.use('/spaces', spacesRouter);
 router.use('/tasks', tasksRouter);
