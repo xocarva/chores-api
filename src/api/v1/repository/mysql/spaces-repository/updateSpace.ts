@@ -60,7 +60,6 @@ export async function updateSpace(id: number, spaceData: PartialSpace): Promise<
     return space;
 
   } catch (error) {
-    console.log(error);
     await connection.rollback();
     throw error;
 
