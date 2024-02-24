@@ -1,10 +1,10 @@
 import express from 'express';
-import { createTask, deleteTask, getTask, listTasks, updateTask } from '../controllers';
+import { createTask, deleteTask, getTask, updateTask } from '../controllers';
+import { isAuthorized } from '../../../middlewares';
 
-export const spacesRouter = express.Router();
+export const tasksRouter = express.Router();
 
-spacesRouter.get('/:id', getTask);
-spacesRouter.get('/:spaceId', listTasks);
-spacesRouter.post('/', createTask);
-spacesRouter.patch('/:id', updateTask);
-spacesRouter.delete('/:id', deleteTask);
+tasksRouter.get('/:id', isAuthorized, getTask);
+tasksRouter.post('/', isAuthorized, createTask);
+tasksRouter.patch('/:id', isAuthorized, updateTask);
+tasksRouter.delete('/:id', isAuthorized, deleteTask);
