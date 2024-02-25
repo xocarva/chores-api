@@ -1,9 +1,9 @@
 import { getUserByEmail, saveUser } from '../../repository';
-import { encryptPassword } from '../../../../utils';
+import { encryptPassword, generateToken } from '../../../../utils';
 import { ConflictError, DatabaseError } from '../../../../errors';
 import { User } from '../../schemas';
 
-export async function register(user: User): Promise<number> {
+export async function register(user: User): Promise<string> {
   let userExists: boolean;
 
   try {
@@ -21,7 +21,7 @@ export async function register(user: User): Promise<number> {
 
   try {
     const { id } = await saveUser({ ...user, password: encryptedPassword });
-    return id;
+    return generateToken({ user: { id } });
   
   } catch (error) {
     throw new DatabaseError('Error saving user');
