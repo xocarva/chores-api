@@ -3,7 +3,12 @@ import { encryptPassword, generateToken } from '../../../../utils';
 import { ConflictError, DatabaseError } from '../../../../errors';
 import { User } from '../../schemas';
 
-export async function register(user: User): Promise<string> {
+interface RegisterResponse {
+  token: string;
+  userId: number;
+}
+
+export async function register(user: User): Promise<RegisterResponse> {
   let userExists: boolean;
 
   try {
@@ -21,7 +26,10 @@ export async function register(user: User): Promise<string> {
 
   try {
     const { id } = await saveUser({ ...user, password: encryptedPassword });
-    return generateToken({ user: { id } });
+    return {
+      token: generateToken({ user: { id } }),
+      userId: id,
+    };
   
   } catch (error) {
     throw new DatabaseError('Error saving user');
