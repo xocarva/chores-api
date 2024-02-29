@@ -14,7 +14,7 @@ interface SpaceUserRow extends RowDataPacket {
 export async function getSpacesByUserId(userId: number): Promise<SpaceWithId[]> {
   const query = `
     SELECT s.id AS spaceId, s.title, s.description, 
-           u.id AS userId, u.name AS userName, us.admin AS userAdmin
+           u.id AS userId, us.admin AS userAdmin
     FROM spaces s
     JOIN user_spaces us ON s.id = us.space_id
     JOIN users u ON us.user_id = u.id
@@ -41,7 +41,6 @@ export async function getSpacesByUserId(userId: number): Promise<SpaceWithId[]> 
 
     const user: PartialUserWithId = {
       id: row.userId,
-      name: row.userName,
       admin: row.userAdmin,
     };
     spacesMap[row.spaceId].users.push(user);
