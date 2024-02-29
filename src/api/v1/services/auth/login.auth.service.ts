@@ -6,6 +6,7 @@ import { Credentials, UserWithId } from '../../schemas';
 interface LoginResponse {
   token: string;
   userName: string;
+  userId: number;
 }
 
 export async function login(credentials: Credentials): Promise<LoginResponse> {
@@ -31,5 +32,6 @@ export async function login(credentials: Credentials): Promise<LoginResponse> {
   return {
     token: generateToken({ user: { id: user.id } }),
     userName: user.name,
+    userId: user.id,
   };
 }

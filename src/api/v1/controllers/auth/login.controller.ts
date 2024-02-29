@@ -7,10 +7,10 @@ export async function login(req: Request<Credentials>, res: Response, next: Next
   
   try {
     const credentials = credentialsSchema.parse(body);
-    const { token, userName } = await authService.login(credentials);
+    const { token, userName, userId } = await authService.login(credentials);
 
     res.status(200);
-    res.send({ token, userName });
+    res.send({ token, userName, userId });
   
   } catch (error) {
     next(error);
