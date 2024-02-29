@@ -1,8 +1,8 @@
 import { saveSpace } from '../../repository';
 import { DatabaseError } from '../../../../errors';
-import { Space, SpaceWithId } from '../../schemas';
+import { Space } from '../../schemas';
 
-export async function createOne(spaceData: Space): Promise<SpaceWithId> {
+export async function createOne(spaceData: Space) {
   try {
     const space = await saveSpace(spaceData);
     return space;

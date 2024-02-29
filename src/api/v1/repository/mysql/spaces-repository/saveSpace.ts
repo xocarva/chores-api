@@ -1,8 +1,8 @@
 import { ResultSetHeader } from 'mysql2';
 import { pool } from '../mysqlConnection';
-import { Space, SpaceWithId } from '../../../schemas';
+import { Space } from '../../../schemas';
 
-export async function saveSpace(spaceData: Space): Promise<SpaceWithId> {
+export async function saveSpace(spaceData: Space) {
   const { title, description, users } = spaceData;
 
   const connection = await pool.getConnection();
@@ -26,7 +26,9 @@ export async function saveSpace(spaceData: Space): Promise<SpaceWithId> {
 
     await connection.commit();
 
-    return { ...spaceData, id: spaceId };
+    const usersData = users.map(user => ({ id: Number(user.id), admin: user.admin ?? false }));
+
+    return { ...spaceData, id: spaceId, users: usersData };
 
   } catch (error) {
     await connection.rollback();
