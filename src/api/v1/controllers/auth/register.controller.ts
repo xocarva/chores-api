@@ -13,7 +13,6 @@ export async function register(req: Request<User>, res: Response, next: NextFunc
     res.send({ token, userId });
 
   } catch (error) {
-    console.log(body, error);
     next(error);
     return;
   }
