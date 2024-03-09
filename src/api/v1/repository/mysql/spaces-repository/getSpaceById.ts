@@ -17,7 +17,7 @@ export async function getSpaceById(id: number): Promise<SpaceWithId | null> {
   const space = spaces[0] as SpaceWithId;
 
   const [users] = await pool.query<UserRow[]>(
-    'SELECT u.id, u.admin FROM user_spaces us JOIN users u ON us.user_id = u.id WHERE us.space_id = ?',
+    'SELECT user_id as id, admin FROM user_spaces WHERE space_id = ?',
     [space.id],
   );
 
