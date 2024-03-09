@@ -6,7 +6,7 @@ type UserRow = User & RowDataPacket;
 
 export async function getTaskById(id: number): Promise<TaskWithId | null> {
   const [ tasks ] = await pool.query<RowDataPacket[]>(
-    'SELECT id, title, date, completed, space_id as spaceId FROM tasks WHERE id = ?',
+    'SELECT id, title, date, completed, space_id as spaceId, description FROM tasks WHERE id = ?',
     [id],
   );
 

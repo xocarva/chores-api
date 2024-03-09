@@ -31,6 +31,11 @@ export async function updateTask(id: number, taskData: PartialTask): Promise<Tas
         queryParams.push(taskData.completed);
       }
 
+      if (taskData.description !== undefined) {
+        query += 'description = ?, ';
+        queryParams.push(taskData.description);
+      }
+
       query = query.slice(0, -2);
       query += ' WHERE id = ?';
       queryParams.push(id);
@@ -51,7 +56,7 @@ export async function updateTask(id: number, taskData: PartialTask): Promise<Tas
     }
 
     const [updatedTaskRows] = await connection.query<RowDataPacket[]>(
-      'SELECT id, title, date, completed, space_id FROM tasks WHERE id = ?',
+      'SELECT id, title, date, completed, space_id, description FROM tasks WHERE id = ?',
       [id],
     );
 
@@ -75,6 +80,7 @@ export async function updateTask(id: number, taskData: PartialTask): Promise<Tas
       date: updatedTaskRows[0].date,
       completed: updatedTaskRows[0].completed === 1,
       spaceId: updatedTaskRows[0].spaceId,
+      description: updatedTaskRows[0].description,
       users: usersRows.map((row: RowDataPacket) => ({
         id: row.id,
         name: row.name,

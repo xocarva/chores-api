@@ -7,6 +7,7 @@ interface TaskUserRow extends RowDataPacket {
   title: string;
   date: Date | null;
   completed: boolean;
+  description: string;
   spaceId: number;
   userId: number;
   userName: string;
@@ -15,7 +16,7 @@ interface TaskUserRow extends RowDataPacket {
 export async function getTasksBySpaceId(spaceId: number): Promise<TaskWithId[]> {
   const query = `
     SELECT
-         t.id AS taskId, t.title, t.date, t.completed, t.space_id AS spaceId,
+         t.id AS taskId, t.title, t.date, t.completed, t.space_id AS spaceId, description,
          u.id AS userId, u.name AS userName
     FROM tasks t
     JOIN task_users tu ON t.id = tu.task_id
@@ -35,6 +36,7 @@ export async function getTasksBySpaceId(spaceId: number): Promise<TaskWithId[]> 
         title: row.title,
         date: row.date ?? undefined,
         completed: row.completed,
+        description: row.description,
         spaceId: row.spaceId,
         users: [],
       };

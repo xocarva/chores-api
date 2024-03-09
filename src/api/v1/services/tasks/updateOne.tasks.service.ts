@@ -23,6 +23,6 @@ export async function updateOne(id: number, taskData: PartialTask): Promise<Task
     return updated;
     
   } catch (error) {
-    throw new DatabaseError('Error updating space');
+    throw new DatabaseError('Error updating task');
   }
 }

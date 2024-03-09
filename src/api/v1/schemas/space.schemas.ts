@@ -3,7 +3,7 @@ import { partialUserWithIdSchema } from './user.schemas';
 
 export const spaceSchema = z.object({
   title: z.string(),
-  description: z.string(),
+  description: z.string().optional(),
   users: z.array(partialUserWithIdSchema),
 });
 

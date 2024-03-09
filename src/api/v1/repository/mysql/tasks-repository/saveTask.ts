@@ -3,7 +3,7 @@ import { pool } from '../mysqlConnection';
 import { Task, TaskWithId } from '../../../schemas';
 
 export async function saveTask(taskData: Task): Promise<TaskWithId> {
-  const { title, date, completed, spaceId, users } = taskData;
+  const { title, date, completed, spaceId, users, description } = taskData;
 
   const connection = await pool.getConnection();
 
@@ -11,9 +11,11 @@ export async function saveTask(taskData: Task): Promise<TaskWithId> {
     await connection.beginTransaction();
 
     const [ taskResult ] = await connection.query<ResultSetHeader>(
-      'INSERT INTO tasks (title, date, completed, space_id) VALUES (?, ?, ?, ?)',
-      [title, date ?? null, completed ?? false, spaceId],
+      'INSERT INTO tasks (title, date, completed, space_id, description) VALUES (?, ?, ?, ?, ?)',
+      [title, date ?? null, completed ?? false, spaceId, description ?? null],
     );
+
+    console.log(1);
 
     const taskId = taskResult.insertId;
 
@@ -23,6 +25,8 @@ export async function saveTask(taskData: Task): Promise<TaskWithId> {
         [taskId, user.id],
       );
     }
+
+    console.log(2);
 
     await connection.commit();
 
