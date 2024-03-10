@@ -4,15 +4,15 @@ import { Task, taskSchema } from '../../schemas';
 
 type TaskRequest = Request & { body: Task };
 
-export async function createTask(req: TaskRequest, res: Response<{ id: number }>, next: NextFunction) {
+export async function createTask(req: TaskRequest, res: Response<{ task: Task }>, next: NextFunction) {
   const { body } = req;
 
   try {
-    const task = taskSchema.parse(body);
-    const { id } = await tasksService.createOne(task);
+    const taskData = taskSchema.parse(body);
+    const task = await tasksService.createOne(taskData);
 
     res.status(201);
-    res.send({ id });
+    res.send({ task });
   
   } catch (error) {
     next(error);
