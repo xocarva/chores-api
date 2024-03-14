@@ -4,7 +4,7 @@ import { partialUserWithIdSchema } from './user.schemas';
 export const taskSchema = z.object({
   title: z.string(),
   completed: z.boolean().optional(),
-  description: z.string().optional(),
+  description: z.string().optional().nullable(),
   spaceId: z.number(),
   users: z.array(partialUserWithIdSchema),
   date: z.union([
