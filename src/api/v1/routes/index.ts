@@ -3,6 +3,7 @@ import { login, register } from '../controllers';
 import * as middlewares from '../../../middlewares';
 import { spacesRouter } from './spaces.router';
 import { tasksRouter } from './tasks.router';
+import { invitationsRouter } from './invitations.router';
 import { MessageResponse } from '../../../interfaces';
 
 const router = express.Router();
@@ -17,6 +18,7 @@ router.post('/login', login);
 router.post('/register', register);
 router.use('/spaces', spacesRouter);
 router.use('/tasks', tasksRouter);
+router.use('/invitations', invitationsRouter);
 router.use(middlewares.notFound);
 router.use(middlewares.errorHandler);
 

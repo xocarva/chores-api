@@ -19,3 +19,12 @@ export function generateToken<T extends JWTPayload>(payload: T): string {
 export function verifyToken(token: string) {
   return jwt.verify(token, JWT_PRIVATE_KEY as string);
 }
+
+export function generateInvitationToken(spaceId: number): string {
+  const token = jwt.sign({
+    exp: Math.floor(Date.now() / 1000) + 86400,
+    spaceId,
+  }, JWT_PRIVATE_KEY as string);
+
+  return token;
+}
