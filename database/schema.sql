@@ -1,0 +1,54 @@
+DROP DATABASE IF EXISTS chores;
+CREATE DATABASE chores;
+
+USE chores;
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    admin BOOLEAN NOT NULL DEFAULT FALSE,
+    premium BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS spaces (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT
+);
+
+CREATE TABLE IF NOT EXISTS user_spaces (
+    user_id INT NOT NULL,
+    space_id INT NOT NULL,
+    admin BOOLEAN NOT NULL DEFAULT FALSE,
+    PRIMARY KEY (user_id, space_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (space_id) REFERENCES spaces(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS tasks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    date DATE,
+    completed BOOLEAN NOT NULL DEFAULT FALSE,
+    description TEXT,
+    space_id INT,
+    FOREIGN KEY (space_id) REFERENCES spaces(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS task_users (
+    task_id INT,
+    user_id INT,
+    PRIMARY KEY (task_id, user_id),
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS invitations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    space_id INT NOT NULL,
+    accepted BOOLEAN NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (space_id) REFERENCES spaces(id)
+);
