@@ -28,6 +28,12 @@ export class UnauthorizedError extends BaseError {
   }
 }
 
+export class ForbiddenError extends BaseError {
+  constructor(message = 'Forbidden') {
+    super(message, 'ForbiddenError', 403);
+  }
+}
+
 export class NotFoundError extends BaseError {
   constructor(message = 'Resource not found') {
     super(message, 'NotFoundError', 404);

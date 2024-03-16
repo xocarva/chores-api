@@ -28,3 +28,11 @@ export function generateInvitationToken(spaceId: number): string {
 
   return token;
 }
+
+export function encodeToken(token: string) {
+  return Buffer.from(token).toString('base64');
+}
+
+export function decodeToken(encodedToken: string) {
+  return Buffer.from(encodedToken, 'base64').toString('ascii');
+}

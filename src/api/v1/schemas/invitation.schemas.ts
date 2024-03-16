@@ -10,6 +10,11 @@ export const invitationSchema = invitationBodySchema.extend({
 
 });
 
+export const acceptInvitationRequestSchema = z.object({
+  userId: z.number(),
+  token: z.string(),
+});
+
 export const partialInvitationSchema = invitationSchema.partial();
 export const invitationWithIdSchema = invitationSchema.extend({ id: z.number() });
 export const partialInvitationWithIdSchema = invitationWithIdSchema.partial();
@@ -19,3 +24,4 @@ export type Invitation = z.infer<typeof invitationSchema>;
 export type PartialInvitation = z.infer<typeof partialInvitationSchema>;
 export type InvitationWithId = z.infer<typeof invitationWithIdSchema>;
 export type PartialInvitationWithId = z.infer<typeof partialInvitationWithIdSchema>;
+export type AcceptInvitationData = z.infer<typeof acceptInvitationRequestSchema>;

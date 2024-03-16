@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { invitationsService } from '../../services';
 import { InvitationBody, invitationBodySchema } from '../../schemas';
-import { generateInvitationToken } from '../../../../utils';
+import { encodeToken, generateInvitationToken } from '../../../../utils';
 
 type InvitationRequest = Request & { body: InvitationBody };
 
@@ -14,7 +14,7 @@ export async function createInvitation(req: InvitationRequest, res: Response<{ t
     await invitationsService.createOne(spaceId, token);
 
     res.status(201);
-    res.send({ token });
+    res.send({ token: encodeToken(token) });
   
   } catch (error) {
     next(error);
