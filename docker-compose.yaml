@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  db:
+    image: mysql
+    env_file: ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+    restart: always
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/1.sql
+  app:
+    build: .
+    env_file: ./.env
+    environment:
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_ROOT_USER: $MYSQL_ROOT_USER
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_HOST: db
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_LOCAL_PORT
+    depends_on:
+      - db
+    restart: on-failure
+volumes:
+  dbdata:
